@@ -1,0 +1,19 @@
+{
+  "name": "app1",
+  "version": "0.0.1",
+  "description": "this is my first app",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "keywords": [
+    "nodejs",
+    "mean-stack"
+  ],
+  "author": "Oussama Ounallah",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2"
+  }
+}
