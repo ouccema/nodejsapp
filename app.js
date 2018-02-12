@@ -18,6 +18,7 @@ const connection = (closure)=>{
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:true}));
 
+/* Get multiple  items */
 
 app.get('/users',function(request,response){
 connection(db=>{
@@ -30,7 +31,7 @@ connection(db=>{
 })
 })
 
-/**/
+/*Add an item*/
 app.post('/add_user',function(request,response){
     connection(db=>{
     
@@ -41,7 +42,7 @@ response.send(result)
     })
     })
 
-
+/* Get one item */
 
     app.get('/users/:id',(req,res)=>{
 
@@ -49,18 +50,44 @@ response.send(result)
 
             let userID = req.params.id;
 
-db.collection('pool').findOne({_id:ObjectID(userID)},(req,res))
+db.collection('pool').findOne({_id:ObjectID(userID)},(request,result)=>{
+res.send(result)
+})
+      })
+    })
+/* update an item */
 
+    app.put('/update',(req,res)=>{
 
-res.send(res)
+        connection(db=>{
+            db.collection('pool').update(req.body
 
+             ,(request,result)=>{
+    
+                res.send(result)
+             })
+            
         })
+        
+ 
     })
 
-app.post('/',(req,res)=>{
-    console.log(req.body)
-    res.send('I got some data')
+    /*delete*/
+
+    app.delete('/delete',(req,res)=>{
+
+connection(db=>{
+db.collection('pool').delete(req.body,(request,result)=>
+{
+res.send(result)
+
 })
+
+})
+
+    })
+
+/**************/
 
 console.log('Listen port 3000');
 app.listen(3000);
