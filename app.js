@@ -4,6 +4,8 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const app = express();
 
+
+
 const connection = (closure)=>{
 
     return MongoClient.connect('mongodb://localhost:27017/App1Db',(err,client)=>{
@@ -12,6 +14,8 @@ const connection = (closure)=>{
     let db = client.db('App1Db');
     closure(db);
     })
+
+   
 }
 
 
@@ -26,7 +30,7 @@ connection(db=>{
     db.collection('pool').find().toArray((err,result)=>{
 
         response.send(result)
-
+        GetData(result)
     })
 })
 })
@@ -34,9 +38,13 @@ connection(db=>{
 /*Add an item*/
 app.post('/add_user',function(request,response){
     connection(db=>{
+
+        
     
-        db.collection('pool').insert(request.body),(err,result)=>{
+        db.collection('pool').insert(request.body),(result,err)=>{
 response.send(result)
+response.send(err)
+console.log(result)
 
         }
     })
@@ -70,6 +78,48 @@ res.send(result)
         })
         
  
+    })
+
+    ////////////
+
+    app.get('/update/:id/:Todo',(req,res)=>{
+
+        let userID = req.params.id;
+        let indexTodo = req.params.iTodo;
+
+        connection(db=>{
+
+            db.collection('pool').findOne({_id:ObjectID(userID)},(err,result)=>{
+
+                if(err) throw err;
+
+                res.send(result.todos[indexTodo]);
+
+            })
+
+        })
+    })
+
+    app.put('/users/:id/:iTodo',(req,res)=>{
+
+        let userId = req.params.id;
+        let indexTodo= req.params.iTodo;
+
+        connection(db=>{
+           
+db.collection('pool').update(
+
+
+
+    {_id:ObjectID(userId)},{$set:{["todos"+indexTodo]:req.body}},(err,result)=>{
+
+        res.send(result)
+    })
+
+        })
+
+
+    
     })
 
     /*delete*/
